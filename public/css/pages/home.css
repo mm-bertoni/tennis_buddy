@@ -1,0 +1,118 @@
+/* Home page specific styles */
+
+.search-form {
+  margin-bottom: 2rem;
+}
+
+.search-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.search-form button {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.buddy-form {
+  margin-bottom: 2rem;
+}
+
+.buddy-form button {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* Results section */
+#results {
+  min-height: 200px;
+}
+
+.result-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.result-card.booked {
+  background-color: rgb(254 242 242);
+  border-color: rgb(252 165 165);
+}
+
+.result-card.available {
+  background-color: rgb(240 253 244);
+  border-color: rgb(187 247 208);
+}
+
+.time-slot {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.court-info {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Posts section */
+#posts {
+  min-height: 200px;
+}
+
+.post-card {
+  padding: 1.5rem;
+  border-left: 4px solid var(--primary-color);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.post-skill {
+  font-weight: 600;
+  color: var(--primary-color);
+  background-color: rgb(239 246 255);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.post-availability {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.post-notes {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.post-meta {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+  text-align: right;
+}
+
+/* Empty states */
+.no-results,
+.no-posts {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-secondary);
+}
+
+.no-results h4,
+.no-posts h4 {
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.no-results p,
+.no-posts p {
+  font-size: 0.875rem;
+}

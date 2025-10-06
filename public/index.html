@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tennis Buddy - Campus Tennis Court & Hitting Buddy Finder</title>
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/pages/home.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>🎾 Tennis Buddy</h1>
+      <nav>
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/reservations.html" class="nav-link">Reservations</a>
+        <a href="/buddies.html" class="nav-link">Buddy Board</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Find Courts & Hitting Partners</h2>
+      <p>Book tennis courts and connect with players of similar skill levels on campus.</p>
+    </section>
+
+    <div class="content-grid">
+      <section id="find-court" class="card">
+        <h3>🏟️ Find Available Courts</h3>
+        <form id="search-form" class="search-form">
+          <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" required />
+          </div>
+          <div class="form-group">
+            <label for="court">Court:</label>
+            <select id="court" required>
+              <option value="">Loading courts...</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Search Availability</button>
+        </form>
+        <div id="results" class="results"></div>
+      </section>
+
+      <section id="buddy-board" class="card">
+        <h3>🤝 Hitting Buddy Board <a href="/buddies.html" style="font-size: 0.8rem; font-weight: normal; color: #64748b; text-decoration: none;">(View all posts →)</a></h3>
+        <form id="post-form" class="buddy-form">
+          <div class="form-group">
+            <label for="skill">Skill Level:</label>
+            <select id="skill" required>
+              <option value="">Select skill level</option>
+              <option value="1.0-2.0">1.0-2.0 (Beginner)</option>
+              <option value="2.5-3.0">2.5-3.0 (Intermediate)</option>
+              <option value="3.5-4.0">3.5-4.0 (Advanced)</option>
+              <option value="4.5-5.0">4.5-5.0 (Expert)</option>
+              <option value="5.5+">5.5+ (Professional)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="availability">Availability:</label>
+            <input id="availability" type="text" placeholder="e.g., Weeknights, Weekends" required />
+          </div>
+          <div class="form-group">
+            <label for="notes">Notes:</label>
+            <textarea id="notes" placeholder="e.g., Down for drills, looking for singles matches"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Post to Board</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Tennis Buddy. Built for CS5610 Web Development.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="/js/api/http.js"></script>
+  <script type="module" src="/js/api/courtsApi.js"></script>
+  <script type="module" src="/js/api/reservationsApi.js"></script>
+  <script type="module" src="/js/api/buddiesApi.js"></script>
+  <script type="module" src="/js/views/renderCards.js"></script>
+  <script type="module" src="/js/pages/home.js"></script>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
