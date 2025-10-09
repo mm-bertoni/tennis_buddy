@@ -61,6 +61,15 @@ router.post(
 // PATCH /api/v1/buddies/:id
 router.patch('/:id', requireAuth, async (req, res, next) => {
   try {
+    // Only owner can update
+    const existing = await buddiesRepo.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ error: 'Buddy post not found' });
+    }
+    if (existing.userId.toString() !== req.userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const result = await buddiesRepo.update(req.params.id, req.body);
     if (result.matchedCount === 0) {
       return res.status(404).json({ error: 'Buddy post not found' });
@@ -74,6 +83,14 @@ router.patch('/:id', requireAuth, async (req, res, next) => {
 // PATCH /api/v1/buddies/:id/close
 router.patch('/:id/close', requireAuth, async (req, res, next) => {
   try {
+    const existing = await buddiesRepo.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ error: 'Buddy post not found' });
+    }
+    if (existing.userId.toString() !== req.userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const result = await buddiesRepo.close(req.params.id);
     if (result.matchedCount === 0) {
       return res.status(404).json({ error: 'Buddy post not found' });
@@ -87,6 +104,14 @@ router.patch('/:id/close', requireAuth, async (req, res, next) => {
 // DELETE /api/v1/buddies/:id
 router.delete('/:id', requireAuth, async (req, res, next) => {
   try {
+    const existing = await buddiesRepo.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ error: 'Buddy post not found' });
+    }
+    if (existing.userId.toString() !== req.userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const result = await buddiesRepo.remove(req.params.id);
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: 'Buddy post not found' });
