@@ -19,14 +19,19 @@ async function findAll() {
 }
 
 async function create({ email, name, skill, password }) {
-  const hashedPassword = await bcrypt.hash(password, 10);
-  return col().insertOne({
+  const doc = {
     email,
     name,
     skill,
-    password: hashedPassword,
     createdAt: new Date().toISOString(),
-  });
+  };
+
+  if (password) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    doc.password = hashedPassword;
+  }
+
+  return col().insertOne(doc);
 }
 
 async function update(id, updateData) {
@@ -44,10 +49,12 @@ async function remove(id) {
 async function getDemoUser() {
   let user = await findByEmail('demo@neu.edu');
   if (!user) {
+    // Create a demo user with a known demo password so login works in demos/tests.
     const result = await create({
       email: 'demo@neu.edu',
       name: 'Demo User',
       skill: '3.0-3.5',
+      password: 'demopass',
     });
     user = await findById(result.insertedId);
   }

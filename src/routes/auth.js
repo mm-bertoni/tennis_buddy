@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import * as usersRepo from '../repositories/usersRepo.js';
 import { validateRequired, validateEmail } from '../middleware/validate.js';
+import { createAuthRateLimit } from '../middleware/rateLimit.js';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -10,6 +11,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // POST /api/v1/auth/signup
 router.post(
   '/signup',
+  createAuthRateLimit(),
   validateRequired(['email', 'name', 'skill', 'password']),
   validateEmail('email'),
   async (req, res, next) => {
@@ -38,6 +40,7 @@ router.post(
 // POST /api/v1/auth/login
 router.post(
   '/login',
+  createAuthRateLimit(),
   validateRequired(['email', 'password']),
   validateEmail('email'),
   async (req, res, next) => {
