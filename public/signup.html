@@ -1,40 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up Form/title>
-  <link rel="stylesheet" href="/css/base.css" />
-</head>
-<body>
-  <main class="signup-container">
-    <h1>Create an Account</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/css/base.css" />
+  </head>
+  <body>
+    <main class="signup-container">
+      <h1>Create an Account</h1>
 
-    <form id="signup-form">
-      <label for="name">Name</label>
-      <input type="text" id="name" required maxlength="100" placeholder="Your name" />
+      <form id="signup-form">
+        <label for="name">Name</label>
+        <input type="text" id="name" required maxlength="100" placeholder="Your name" />
 
-      <label for="email">Email</label>
-      <input type="email" id="email" required placeholder="you@example.com" />
+        <label for="email">Email</label>
+        <input type="email" id="email" required placeholder="you@example.com" />
 
-      <label for="skill">Skill Level</label>
-      <select id="skill" required>
-        <option value="">Select skill level</option>
-        <option value="1.0-2.0">1.0-2.0 (Beginner)</option>
-        <option value="2.5-3.0">2.5-3.0 (Intermediate)</option>
-        <option value="3.5-4.0">3.5-4.0 (Advanced)</option>
-        <option value="4.5-5.0">4.5-5.0 (Expert)</option>   
-        <option value="5.5+">5.5+ (Professional)</option>
-      </select>
+        <label for="skill">Skill Level</label>
+        <select id="skill" required>
+          <option value="">Select skill level</option>
+          <option value="1.0-2.0">1.0-2.0 (Beginner)</option>
+          <option value="2.5-3.0">2.5-3.0 (Intermediate)</option>
+          <option value="3.5-4.0">3.5-4.0 (Advanced)</option>
+          <option value="4.5-5.0">4.5-5.0 (Expert)</option>
+          <option value="5.5+">5.5+ (Professional)</option>
+        </select>
 
-      <button type="submit">Sign Up</button>
-    </form>
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="Create a password" />
 
-    <div id="message"></div>
+        <button type="submit">Sign Up</button>
+      </form>
 
-    <p>Already have an account? <a href="/login.html">Log in</a></p>
-  </main>
+      <div id="message"></div>
 
-  <script type="module" src="/js/signup.js"></script>
-</body>
+      <p>Already have an account? <a href="/login.html">Log in</a></p>
+    </main>
+
+    <script type="module" src="/js/pages/signup.js"></script>
+  </body>
 </html>

@@ -26,7 +26,7 @@ if (form) {
 
       showMessage('Logging in...', 'success');
       setTimeout(() => {
-        window.location.href = '/home.html';
+        window.location.href = '/index.html';
       }, 800);
     } catch (err) {
       showMessage(`Login failed: ${err.message}`, 'error');

@@ -34,7 +34,7 @@ form.addEventListener('submit', async (e) => {
 
     // Redirect after a short while
     setTimeout(() => {
-      window.location.href = '/home.html';
+      window.location.href = '/index.html';
     }, 1000);
   } catch (err) {
     showMessage(`Failed to sign up: ${err.message}`, 'error');
