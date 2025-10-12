@@ -31,3 +31,9 @@ export async function closeBuddyPost(id) {
 export async function deleteBuddyPost(id) {
   return del(`${API_BASE}/${id}`);
 }
+
+export async function getMyBuddyPosts() {
+  const userId = localStorage.getItem('userId');
+  if (!userId) return [];
+  return get(`${API_BASE}?userId=${userId}`);
+}

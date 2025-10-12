@@ -3,10 +3,17 @@
 import { initHome } from './pages/home.js';
 import { initReservations } from './pages/reservations.js';
 import { initBuddies } from './pages/buddies.js';
+import { updateNavigation } from './utils/auth.js';
+import './utils/confirmModal.js'; // Load custom confirm modal
+import './utils/reservationActions.js'; // Load reservation actions globally
+import './utils/buddyActions.js'; // Load buddy actions globally
 
 // Router function to initialize the correct page
 function initPage() {
   const path = window.location.pathname;
+  
+  // Initialize navigation for all pages
+  updateNavigation();
   
   try {
     switch (path) {

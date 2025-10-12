@@ -1,13 +1,19 @@
 import express from 'express';
 import * as usersRepo from '../repositories/usersRepo.js';
+import { requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// GET /api/v1/users/me (mock endpoint for demo)
-router.get('/me', async (req, res, next) => {
+// GET /api/v1/users/me - Get current authenticated user
+router.get('/me', requireAuth, async (req, res, next) => {
   try {
-    const user = await usersRepo.getDemoUser();
-    res.json(user);
+    const user = await usersRepo.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    // Don't send password hash
+    const { passwordHash, ...userWithoutPassword } = user;
+    res.json(userWithoutPassword);
   } catch (error) {
     next(error);
   }

@@ -29,7 +29,10 @@ export function renderReservationCards(reservations, container) {
   `).join('');
 }
 
-export function renderBuddyPosts(posts, container) {
+// Track if listener has been added to buddy posts container
+const buddyListenerAdded = new WeakSet();
+
+export function renderBuddyPosts(posts, container, showEditButtons = false) {
   if (posts.length === 0) {
     container.innerHTML = `
       <div class="no-posts">
@@ -48,14 +51,54 @@ export function renderBuddyPosts(posts, container) {
           ${post.isOpen ? 'Open' : 'Closed'}
         </span>
       </div>
+      ${post.userName ? `<div class="post-user" style="font-weight: 500; color: #475569; margin-bottom: 0.5rem;">👤 ${post.userName}</div>` : ''}
       <div class="post-availability">${post.availability}</div>
       ${post.notes ? `<div class="post-notes">${post.notes}</div>` : ''}
       <div class="post-meta">
         <span class="post-date">Posted ${formatDate(post.createdAt)}</span>
       </div>
+      ${showEditButtons ? `
+        <div class="post-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn btn-secondary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="edit-post" data-id="${post._id}">
+            Edit
+          </button>
+          <button class="btn btn-danger" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="delete-post" data-id="${post._id}">
+            Delete
+          </button>
+        </div>
+      ` : ''}
     </div>
   `).join('');
+  
+  // Add event listener only once
+  if (showEditButtons && !buddyListenerAdded.has(container)) {
+    setupBuddyPostListeners(container);
+    buddyListenerAdded.add(container);
+  }
 }
+
+function setupBuddyPostListeners(container) {
+  container.addEventListener('click', async (e) => {
+    const button = e.target.closest('[data-action]');
+    if (!button) return;
+    
+    const action = button.dataset.action;
+    const id = button.dataset.id;
+    
+    if (action === 'edit-post') {
+      if (window.editBuddyPost) {
+        await window.editBuddyPost(id);
+      }
+    } else if (action === 'delete-post') {
+      if (window.deleteBuddyPost) {
+        await window.deleteBuddyPost(id);
+      }
+    }
+  });
+}
+
+// Track if listener has been added to avoid duplicates
+const listenerAdded = new WeakSet();
 
 export function renderUserReservations(reservations, container, courts = []) {
   if (reservations.length === 0) {
@@ -84,12 +127,38 @@ export function renderUserReservations(reservations, container, courts = []) {
           </div>
         </div>
         <div class="reservation-actions">
-          <button class="btn btn-secondary" onclick="editReservation('${reservation._id}')">Edit</button>
-          <button class="btn btn-danger" onclick="cancelReservation('${reservation._id}')">Cancel</button>
+          <button class="btn btn-secondary" data-action="edit" data-id="${reservation._id}">Edit</button>
+          <button class="btn btn-danger" data-action="cancel" data-id="${reservation._id}">Cancel</button>
         </div>
       </div>
     `;
   }).join('');
+  
+  // Add event listener only once
+  if (!listenerAdded.has(container)) {
+    setupReservationListeners(container);
+    listenerAdded.add(container);
+  }
+}
+
+function setupReservationListeners(container) {
+  container.addEventListener('click', async (e) => {
+    const button = e.target.closest('[data-action]');
+    if (!button) return;
+    
+    const action = button.dataset.action;
+    const id = button.dataset.id;
+    
+    if (action === 'cancel') {
+      if (window.cancelReservation) {
+        await window.cancelReservation(id);
+      }
+    } else if (action === 'edit') {
+      if (window.editReservation) {
+        await window.editReservation(id);
+      }
+    }
+  });
 }
 
 export function showError(message, container = null) {
@@ -144,7 +213,8 @@ export function formatTime(time) {
 }
 
 export function formatDate(dateString) {
-  const date = new Date(dateString);
+  // Fix timezone issue: append time to ensure it's treated as local date
+  const date = new Date(dateString + 'T00:00:00');
   return date.toLocaleDateString('en-US', {
     weekday: 'short',
     year: 'numeric',

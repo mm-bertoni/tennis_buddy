@@ -8,8 +8,15 @@ const router = express.Router();
 // GET /api/v1/buddies
 router.get('/', async (req, res, next) => {
   try {
-    const { skill } = req.query;
-    const posts = await buddiesRepo.findAll({ skill });
+    const { skill, userId } = req.query;
+    
+    let posts;
+    if (userId) {
+      posts = await buddiesRepo.findByUser(userId);
+    } else {
+      posts = await buddiesRepo.findAll({ skill });
+    }
+    
     res.json(posts);
   } catch (error) {
     next(error);

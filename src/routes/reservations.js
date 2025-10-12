@@ -90,17 +90,23 @@ router.post(
 // PATCH /api/v1/reservations/:id
 router.patch('/:id', requireAuth, async (req, res, next) => {
   try {
-    const { date, start, end } = req.body;
+    const { courtId, date, start, end } = req.body;
 
-    // If updating time, check for overlap
-    if (date || start || end) {
-      const existing = await reservationsRepo.findById(req.params.id);
-      if (!existing) {
-        return res.status(404).json({ error: 'Reservation not found' });
-      }
+    // Get existing reservation first
+    const existing = await reservationsRepo.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ error: 'Reservation not found' });
+    }
+    
+    // Only owner can update
+    if (existing.userId.toString() !== req.userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
 
+    // Check for overlap if any time/date/court is being changed
+    if (courtId || date || start || end) {
       const overlap = await reservationsRepo.hasOverlap({
-        courtId: existing.courtId,
+        courtId: courtId || existing.courtId,
         date: date || existing.date,
         start: start || existing.start,
         end: end || existing.end,
@@ -109,16 +115,10 @@ router.patch('/:id', requireAuth, async (req, res, next) => {
 
       if (overlap) {
         return res.status(409).json({
-          error: 'Updated time slot overlaps with an existing reservation',
+          error: 'This time slot is already booked. Please choose a different time.',
         });
       }
     }
-
-    // Only owner can update
-    const existing = await reservationsRepo.findById(req.params.id);
-    if (!existing) return res.status(404).json({ error: 'Reservation not found' });
-    if (existing.userId.toString() !== req.userId)
-      return res.status(403).json({ error: 'Forbidden' });
 
     const result = await reservationsRepo.update(req.params.id, req.body);
     if (result.matchedCount === 0) {

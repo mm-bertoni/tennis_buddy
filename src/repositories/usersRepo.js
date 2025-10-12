@@ -28,7 +28,7 @@ async function create({ email, name, skill, password }) {
 
   if (password) {
     const hashedPassword = await bcrypt.hash(password, 10);
-    doc.password = hashedPassword;
+    doc.passwordHash = hashedPassword;
   }
 
   return col().insertOne(doc);

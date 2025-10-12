@@ -24,10 +24,11 @@ form.addEventListener('submit', async (e) => {
     // Send data to backend API
     const response = await post('/api/v1/auth/signup', { name, email, skill, password });
 
-    // Store token and userId for authenticated requests
+    // Store token, userId, and name for authenticated requests
     if (response && response.token) {
       localStorage.setItem('token', response.token);
       localStorage.setItem('userId', response.userId);
+      localStorage.setItem('userName', name);
     }
 
     showMessage('Account created successfully! Redirecting...', 'success');

@@ -22,6 +22,20 @@ if (form) {
       if (response && response.token) {
         localStorage.setItem('token', response.token);
         localStorage.setItem('userId', response.userId);
+        
+        // Fetch and store user name
+        try {
+          const userResponse = await fetch('/api/v1/users/me', {
+            headers: { 'Authorization': `Bearer ${response.token}` }
+          });
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            localStorage.setItem('userName', userData.name);
+          }
+        } catch (e) {
+          // If fetching user fails, just use email
+          localStorage.setItem('userName', email.split('@')[0]);
+        }
       }
 
       showMessage('Logging in...', 'success');
