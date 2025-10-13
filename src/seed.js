@@ -133,7 +133,7 @@ async function seedDatabase() {
         'Open to singles or doubles',
         'Prefer morning sessions',
       ][Math.floor(Math.random() * 3)];
-      await createBuddy({ userId: user._id, skill, availability, notes });
+      await createBuddy({ userId: user._id, skill, availability, notes, email: user.email });
       createdBuddy++;
     }
 

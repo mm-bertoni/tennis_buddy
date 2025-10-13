@@ -44,15 +44,19 @@ async function findByUser(userId) {
     .toArray();
 }
 
-async function create({ userId, skill, availability, notes }) {
-  return col().insertOne({
+async function create({ userId, skill, availability, notes, email }) {
+  const doc = {
     userId: new ObjectId(userId),
     skill,
     availability,
     notes: notes || '',
     isOpen: true,
     createdAt: new Date().toISOString(),
-  });
+  };
+
+  if (email) doc.email = email;
+
+  return col().insertOne(doc);
 }
 
 async function update(id, updateData) {

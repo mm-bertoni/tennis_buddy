@@ -58,7 +58,8 @@ export function renderBuddyPosts(posts, container, showEditButtons = false) {
           ${post.isOpen ? 'Open' : 'Closed'}
         </span>
       </div>
-      ${post.userName ? `<div class="post-user" style="font-weight: 500; color: #475569; margin-bottom: 0.5rem;">👤 ${post.userName}</div>` : ''}
+  ${post.userName ? `<div class="post-user" style="font-weight: 500; color: #475569; margin-bottom: 0.25rem;">👤 ${post.userName}</div>` : ''}
+  ${post.email ? `<div class="post-email"><a href="mailto:${post.email}" class="post-email-link">✉️ ${post.email}</a></div>` : ''}
       <div class="post-availability">${post.availability}</div>
       ${post.notes ? `<div class="post-notes">${post.notes}</div>` : ''}
       <div class="post-meta">
