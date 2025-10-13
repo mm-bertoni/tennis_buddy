@@ -126,7 +126,7 @@ async function seedDatabase() {
       buddyAttempts++;
       const user = users[Math.floor(Math.random() * users.length)];
       const skill = user.skill || skills[Math.floor(Math.random() * skills.length)];
-      const hour = 7 + Math.floor(Math.random() * 12); // 7..18
+      const hour = 7 + Math.floor(Math.random() * 12);
       const availability = `Weekdays ${hour}:00 - ${hour + 1}:30`;
       const notes = [
         `Looking for hitting partner near ${user.name}`,
@@ -143,7 +143,7 @@ async function seedDatabase() {
     let createdRes = 0;
     let resAttempts = 0;
     const today = new Date();
-    const dateWindow = 21; // days ahead
+    const dateWindow = 21;
     while (createdRes < targetReservations && resAttempts < targetReservations * 10) {
       resAttempts++;
       const user = users[Math.floor(Math.random() * users.length)];
@@ -151,10 +151,8 @@ async function seedDatabase() {
       const dayOffset = Math.floor(Math.random() * dateWindow);
       const date = new Date(today.getTime() + dayOffset * 24 * 60 * 60 * 1000);
       const dateStr = date.toISOString().slice(0, 10);
-
-      // choose a random start hour between 7 and 20, duration 1 or 2 hours
-      const startHour = 7 + Math.floor(Math.random() * 14); // 7..20
-      const duration = 1 + Math.floor(Math.random() * 2); // 1 or 2
+      const startHour = 7 + Math.floor(Math.random() * 14);
+      const duration = 1 + Math.floor(Math.random() * 2);
       const start = `${String(startHour).padStart(2, '0')}:00`;
       const end = `${String(startHour + duration).padStart(2, '0')}:00`;
 
