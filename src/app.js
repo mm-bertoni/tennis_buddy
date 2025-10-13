@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { createRateLimit } from './middleware/rateLimit.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Import routes
 import courtsRouter from './routes/courts.js';
@@ -12,6 +14,10 @@ import usersRouter from './routes/users.js';
 import authRouter from './routes/auth.js';
 
 const app = express();
+
+// __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Security middleware
 app.use(
@@ -53,7 +59,7 @@ app.get('/health', (req, res) => {
 
 // Catch-all for SPA routing
 app.get('*', (req, res) => {
-  res.sendFile('index.html', { root: 'public' });
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // Error handling
