@@ -55,15 +55,13 @@ const skills = ['1.0-2.0', '2.5-3.0', '3.0-3.5', '3.5-4.0', '4.0-4.5', '4.5-5.0'
 // Generate database entries
 const sampleCourts = [];
 for (let i = 0; i < courtNames.length; i++) {
-  for (let k = 0; k < surfaces.length; k++) {
-    for (let j = 0; j < locations.length; j++) {
-      sampleCourts.push({
-        name: courtNames[i],
-        surface: surfaces[k],
-        location: locations[j],
-        openHours: openHoures[j % openHoures.length],
-      });
-    }
+  for (let j = 0; j < locations.length; j++) {
+    sampleCourts.push({
+      name: courtNames[i],
+      surface: surfaces[i % surfaces.length],
+      location: locations[j],
+      openHours: openHoures[j % openHoures.length],
+    });
   }
 }
 
