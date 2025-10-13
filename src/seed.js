@@ -57,14 +57,12 @@ const sampleCourts = [];
 for (let i = 0; i < courtNames.length; i++) {
   for (let k = 0; k < surfaces.length; k++) {
     for (let j = 0; j < locations.length; j++) {
-      for (let l = 0; l < openHoures.length; l++) {
-        sampleCourts.push({
-          name: courtNames[i],
-          surface: surfaces[k],
-          location: locations[j],
-          openHours: openHoures[l],
-        });
-      }
+      sampleCourts.push({
+        name: courtNames[i],
+        surface: surfaces[k],
+        location: locations[j],
+        openHours: openHoures[j % openHoures.length],
+      });
     }
   }
 }
