@@ -1,17 +1,8 @@
 {
-  "version": 2,
-  "buildCommand": "echo 'No build needed'",
-  "outputDirectory": "public",
-  "functions": {
-    "api/index.js": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  },
   "rewrites": [
     {
-      "source": "/api/v1/:path*",
-      "destination": "/api/index.js"
+      "source": "/api/v1/(.*)",
+      "destination": "/api/index"
     }
   ]
 }
