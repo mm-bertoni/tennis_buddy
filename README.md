@@ -169,13 +169,19 @@ _Entity relationship diagram showing collections and their relationships_
    PORT=3000
    ```
 
-4. **Start the development server**
+4. **Seed the database**
+
+   ```bash
+   node src/seed.js
+   ```
+
+5. **Start the development server**
 
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**
+6. **Open your browser**
    Navigate to `http://localhost:3000`
 
 ### Production Deployment
