@@ -7,9 +7,20 @@ A web application that helps students find and book tennis courts on campus whil
 ## Project Information
 
 - **Course**: CS5610 Web Development
-- **Author**: [Your Name]
-- **Class Link**: [Course Link]
-- **Live Demo**: [Deployment URL]
+- **Author**: [Shaobo Chen & Muchen Qi]
+- **Class Link**: [https://johnguerra.co/classes/webDevelopment_online_fall_2025/Links to an external site.]
+- **Repository**: [github.com/GideonCCC/tennis_buddy](https://github.com/GideonCCC/tennis_buddy)
+- **Database**: MongoDB Atlas (Cloud)
+- **Status**: ✅ Development Environment Ready
+- **Live Demo**: [To be deployed]
+
+## Current Setup Status
+
+✅ **Repository cloned** from `git@github.com:GideonCCC/tennis_buddy.git`  
+✅ **Dependencies installed** (228 packages)  
+✅ **MongoDB Atlas configured** - Connected to cloud database  
+✅ **Database seeded** - 1,080 courts, 4,536 users, 100 buddy posts, 100 reservations  
+✅ **Development server ready** - Ready to run on `http://localhost:3000`
 
 ## Project Objective
 
@@ -47,6 +58,10 @@ The application solves real pain points faced by tennis players on campus, makin
 - **As a student**, I want to cancel reservations so that I can free up courts for other players
 - **As a student**, I want to see court information including location and surface type so that I can choose the best court for my needs
 - **As a student**, I want to filter buddy posts by skill level so that I can find players at my level
+
+## Mock up
+
+📄 **[View Full Mockup Document (PDF)](public/submissions/CS5610_Project02_Tennis_Buddy.pdf)**
 
 ## Data Model
 
@@ -109,82 +124,61 @@ The application uses MongoDB with the following collections:
 }
 ```
 
-## Design Mockups
-
-![Home Page Design](public/img/mockup-home.png)
-_Home page showing court search and buddy board_
-
-![Reservations Page Design](public/img/mockup-reservations.png)
-_Reservations page for booking and managing court reservations_
-
-![Buddies Page Design](public/img/mockup-buddies.png)
-_Buddies page for posting and finding hitting partners_
-
-## Data Model Diagram
-
-![Data Model Diagram](public/img/data-model.png)
-_Entity relationship diagram showing collections and their relationships_
-
 ## Technology Stack
 
 - **Backend**: Node.js, Express.js, MongoDB (native driver)
 - **Frontend**: Vanilla JavaScript (ES6 modules), HTML5, CSS3
-- **Database**: MongoDB
+- **Database**: MongoDB Atlas (Cloud Database)
 - **Development Tools**: ESLint, Prettier, Nodemon
-- **Deployment**: Render/Railway + MongoDB Atlas
+- **Deployment**: Render/Railway (ready to deploy)
 
 ## Installation & Setup
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- MongoDB (local or Atlas)
+- Node.js (v18 or higher) ✅ Installed
+- MongoDB Atlas Account ✅ Configured
 
-### Local Development
+### Quick Start (Current Setup)
 
-1. **Clone the repository**
+**This project is already configured and ready to run!** 
 
-   ```bash
-   git clone [repository-url]
-   cd tennis-buddy
-   ```
+The environment is set up with:
+- ✅ Dependencies installed
+- ✅ MongoDB Atlas connected
+- ✅ Database seeded with sample data
+- ✅ Environment variables configured
 
-2. **Install dependencies**
+**To start the development server:**
 
-   ```bash
-   npm install
-   ```
+```bash
+npm run dev
+```
 
-3. **Set up environment variables**
+Then open your browser and navigate to `http://localhost:3000`
 
-   ```bash
-   cp .env.example .env
-   ```
+### Environment Variables (Already Configured)
 
-   Edit `.env` with your MongoDB connection string:
+The `.env` file is configured with:
 
-   ```
-   MONGO_URI=mongodb://localhost:27017
-   DB_NAME=tennis_buddy
-   PORT=3000
-   ```
+```env
+# MongoDB Configuration (Atlas Cloud)
+MONGO_URI=mongodb+srv://812249072:****@cluster0.mjacxti.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+DB_NAME=tennis_buddy
+PORT=3000
 
-4. **Seed the database**
+# JWT Secret (for authentication)
+JWT_SECRET=your-secret-key-change-this-in-production
 
-   ```bash
-   node src/seed.js
-   ```
+# Node Environment
+NODE_ENV=development
+```
 
-5. **Start the development server**
 
-   ```bash
-   npm run dev
-   ```
-
-6. **Open your browser**
-   Navigate to `http://localhost:3000`
 
 ### Production Deployment
+
+**MongoDB Atlas is already configured!** You can use the same database for production or create a separate production database.
 
 #### Using Render (Recommended)
 
@@ -195,8 +189,9 @@ _Entity relationship diagram showing collections and their relationships_
    - Environment: Node.js
 
 3. **Set environment variables** in Render dashboard:
-   - `MONGO_URI`: Your MongoDB Atlas connection string
-   - `DB_NAME`: `tennis_buddy_prod`
+   - `MONGO_URI`: `mongodb+srv://812249072:****@cluster0.mjacxti.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+   - `DB_NAME`: `tennis_buddy` (or `tennis_buddy_prod` for separate prod DB)
+   - `JWT_SECRET`: Strong secret key for production
    - `NODE_ENV`: `production`
 
 4. **Deploy** and get your live URL
@@ -205,9 +200,22 @@ _Entity relationship diagram showing collections and their relationships_
 
 1. **Connect your GitHub repository** to Railway
 2. **Add environment variables**:
-   - `MONGO_URI`: Your MongoDB Atlas connection string
-   - `DB_NAME`: `tennis_buddy_prod`
+   - `MONGO_URI`: Your MongoDB Atlas connection string (same as above)
+   - `DB_NAME`: `tennis_buddy` (or create separate prod database)
+   - `JWT_SECRET`: Strong secret key for production
+   - `NODE_ENV`: `production`
 3. **Deploy** automatically
+
+#### Production Database Options
+
+**Option 1: Use existing database** (Quick deployment)
+- Use the same `tennis_buddy` database already seeded
+- Set `DB_NAME=tennis_buddy` in production
+
+**Option 2: Separate production database** (Recommended)
+- Create a new database in MongoDB Atlas: `tennis_buddy_prod`
+- Set `DB_NAME=tennis_buddy_prod` in production
+- Run `npm run seed` once after deployment to populate production data
 
 ## API Endpoints
 
@@ -274,6 +282,33 @@ _Entity relationship diagram showing collections and their relationships_
 - [x] Mobile-responsive design
 - [x] Accessibility considerations
 
+## Database Information
+
+### Current Database Status
+
+The MongoDB Atlas database is **seeded and ready** with:
+- **1,080 Courts** - Various surfaces (hard, clay, grass) across 6 locations
+- **4,536 Users** - Different skill levels from 1.0 to 5.5+
+- **100 Buddy Posts** - Sample posts from users looking for hitting partners
+- **100 Reservations** - Sample court bookings for the next 21 days
+
+### Database Collections
+
+| Collection | Document Count | Description |
+|------------|----------------|-------------|
+| `courts` | 1,080 | Tennis courts with surface, location, and hours |
+| `users` | 4,536 | User profiles with email, name, and skill level |
+| `buddy_posts` | 100 | Posts from users seeking hitting partners |
+| `reservations` | 100 | Court bookings with date and time slots |
+
+### Accessing MongoDB Atlas
+
+- **Dashboard**: [cloud.mongodb.com](https://cloud.mongodb.com)
+- **Cluster**: `cluster0.mjacxti.mongodb.net`
+- **Database**: `tennis_buddy`
+
+You can view and manage your data through the MongoDB Atlas web interface.
+
 ## Development Commands
 
 ```bash
@@ -282,6 +317,9 @@ npm run dev
 
 # Production server
 npm start
+
+# Seed/reseed database (takes 2-3 minutes)
+npm run seed
 
 # Lint code
 npm run lint
@@ -293,31 +331,97 @@ npm run lint:fix
 npm run format
 ```
 
+### Troubleshooting
+
+**Port 3000 already in use?**
+```bash
+# Find and kill the process using port 3000
+lsof -ti:3000 | xargs kill -9
+
+# Or change the port in .env file
+PORT=3001
+```
+
+**Database connection issues?**
+- Check your MongoDB Atlas IP whitelist (Network Access)
+- Verify your database credentials in the `.env` file
+- Ensure your internet connection is stable
+
 ## Project Structure
 
 ```
 tennis-buddy/
-├── public/                 # Static files
-│   ├── css/               # Stylesheets
-│   ├── js/                # Client-side JavaScript
-│   │   ├── api/          # API client functions
-│   │   ├── views/        # DOM rendering helpers
-│   │   └── pages/        # Page-specific logic
-│   ├── img/              # Images and mockups
-│   └── *.html            # HTML pages
-├── src/                   # Server-side code
-│   ├── db/               # Database connection
-│   ├── repositories/     # Data access layer
-│   ├── routes/           # API routes
-│   ├── middleware/       # Express middleware
-│   ├── app.js           # Express app configuration
-│   └── server.js        # Server entry point
-├── .env.example          # Environment variables template
-├── .eslintrc.cjs        # ESLint configuration
-├── .prettierrc          # Prettier configuration
-├── package.json         # Dependencies and scripts
-├── LICENSE              # MIT License
-└── README.md            # This file
+├── public/                        # Static frontend files
+│   ├── css/                       # Stylesheets
+│   │   ├── auth.css              # Authentication pages styling
+│   │   ├── base.css              # Base styles and variables
+│   │   └── pages/                # Page-specific styles
+│   │       ├── buddies.css       # Buddy board page
+│   │       ├── home.css          # Home page
+│   │       └── reservations.css  # Reservations page
+│   ├── js/                       # Client-side JavaScript
+│   │   ├── api/                  # API client functions
+│   │   │   ├── buddiesApi.js    # Buddy posts API calls
+│   │   │   ├── courtsApi.js     # Courts API calls
+│   │   │   ├── http.js          # HTTP utilities
+│   │   │   └── reservationsApi.js # Reservations API calls
+│   │   ├── pages/                # Page-specific logic
+│   │   │   ├── buddies.js       # Buddy board functionality
+│   │   │   ├── home.js          # Home page functionality
+│   │   │   ├── login.js         # Login page
+│   │   │   ├── reservations.js  # Reservations page
+│   │   │   └── signup.js        # Signup page
+│   │   ├── utils/                # Utility functions
+│   │   │   ├── auth.js          # Authentication helpers
+│   │   │   ├── buddyActions.js  # Buddy post actions
+│   │   │   ├── confirmModal.js  # Confirmation modal
+│   │   │   ├── editBuddyModal.js    # Edit buddy modal
+│   │   │   ├── editReservationModal.js # Edit reservation modal
+│   │   │   └── reservationActions.js   # Reservation actions
+│   │   ├── views/                # DOM rendering helpers
+│   │   │   └── renderCards.js   # Card rendering utilities
+│   │   └── main.js              # Main entry point
+│   ├── img/                      # Images and screenshots
+│   │   ├── demo-buddies.png     # Buddy board screenshot
+│   │   ├── demo-home.png        # Home page screenshot
+│   │   ├── demo-login.png       # Login page screenshot
+│   │   └── demo-reservations.png # Reservations screenshot
+│   ├── submissions/              # Project submissions
+│   │   └── CS5610_Project02_Tennis_Buddy.pdf # Mockup document
+│   ├── index.html               # Home page
+│   ├── buddies.html             # Buddy board page
+│   ├── reservations.html        # Reservations page
+│   ├── login.html               # Login page
+│   └── signup.html              # Signup page
+├── src/                          # Server-side code
+│   ├── db/                       # Database configuration
+│   │   └── client.js            # MongoDB connection
+│   ├── middleware/               # Express middleware
+│   │   ├── auth.js              # JWT authentication
+│   │   ├── errorHandler.js      # Error handling
+│   │   ├── rateLimit.js         # Rate limiting
+│   │   └── validate.js          # Input validation
+│   ├── repositories/             # Data access layer
+│   │   ├── buddiesRepo.js       # Buddy posts repository
+│   │   ├── courtsRepo.js        # Courts repository
+│   │   ├── reservationsRepo.js  # Reservations repository
+│   │   └── usersRepo.js         # Users repository
+│   ├── routes/                   # API routes
+│   │   ├── auth.js              # Authentication routes
+│   │   ├── buddies.js           # Buddy posts routes
+│   │   ├── courts.js            # Courts routes
+│   │   ├── reservations.js      # Reservations routes
+│   │   └── users.js             # Users routes
+│   ├── app.js                   # Express app configuration
+│   ├── server.js                # Server entry point
+│   └── seed.js                  # Database seeding script
+├── .env                          # Environment variables (not in git)
+├── .gitignore                   # Git ignore file
+├── AUTHENTICATION_IMPLEMENTATION.md # Auth documentation
+├── LICENSE                      # MIT License
+├── package.json                 # Dependencies and scripts
+├── package-lock.json            # Dependency lock file
+└── README.md                    # This file
 ```
 
 ## Contributing
@@ -339,6 +443,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Uses modern web development best practices
 
 ## Demo Screenshots
+![Login page](public/img/demo-login.png)
+_Login page showing log in functionality_
 
 ![Home Page](public/img/demo-home.png)
 _Home page showing court search functionality_
