@@ -1,10 +1,11 @@
 // DOM rendering helpers
 
 export function renderCourtsSelect(courts, selectElement) {
-  selectElement.innerHTML = '<option value="">Select a court</option>' +
-    courts.map(court => 
-      `<option value="${court._id}">${court.name} - ${court.location}</option>`
-    ).join('');
+  selectElement.innerHTML =
+    '<option value="">Select a court</option>' +
+    courts
+      .map((court) => `<option value="${court._id}">${court.name} - ${court.location}</option>`)
+      .join('');
 }
 
 export function renderReservationCards(reservations, container) {
@@ -18,7 +19,9 @@ export function renderReservationCards(reservations, container) {
     return;
   }
 
-  container.innerHTML = reservations.map(reservation => `
+  container.innerHTML = reservations
+    .map(
+      (reservation) => `
     <div class="result-card booked">
       <div>
         <div class="time-slot">${formatTime(reservation.start)} - ${formatTime(reservation.end)}</div>
@@ -26,7 +29,9 @@ export function renderReservationCards(reservations, container) {
       </div>
       <div class="status booked">Booked</div>
     </div>
-  `).join('');
+  `
+    )
+    .join('');
 }
 
 // Track if listener has been added to buddy posts container
@@ -43,7 +48,9 @@ export function renderBuddyPosts(posts, container, showEditButtons = false) {
     return;
   }
 
-  container.innerHTML = posts.map(post => `
+  container.innerHTML = posts
+    .map(
+      (post) => `
     <div class="post-card">
       <div class="post-header">
         <span class="post-skill">${post.skill}</span>
@@ -57,7 +64,9 @@ export function renderBuddyPosts(posts, container, showEditButtons = false) {
       <div class="post-meta">
         <span class="post-date">Posted ${formatDate(post.createdAt)}</span>
       </div>
-      ${showEditButtons ? `
+      ${
+        showEditButtons
+          ? `
         <div class="post-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <button class="btn btn-secondary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" data-action="edit-post" data-id="${post._id}">
             Edit
@@ -66,10 +75,14 @@ export function renderBuddyPosts(posts, container, showEditButtons = false) {
             Delete
           </button>
         </div>
-      ` : ''}
+      `
+          : ''
+      }
     </div>
-  `).join('');
-  
+  `
+    )
+    .join('');
+
   // Add event listener only once
   if (showEditButtons && !buddyListenerAdded.has(container)) {
     setupBuddyPostListeners(container);
@@ -81,10 +94,10 @@ function setupBuddyPostListeners(container) {
   container.addEventListener('click', async (e) => {
     const button = e.target.closest('[data-action]');
     if (!button) return;
-    
+
     const action = button.dataset.action;
     const id = button.dataset.id;
-    
+
     if (action === 'edit-post') {
       if (window.editBuddyPost) {
         await window.editBuddyPost(id);
@@ -111,12 +124,13 @@ export function renderUserReservations(reservations, container, courts = []) {
     return;
   }
 
-  container.innerHTML = reservations.map(reservation => {
-    // Find the court name by ID
-    const court = courts.find(c => c._id === reservation.courtId);
-    const courtName = court ? court.name : `Court ${reservation.courtId}`;
-    
-    return `
+  container.innerHTML = reservations
+    .map((reservation) => {
+      // Find the court name by ID
+      const court = courts.find((c) => c._id === reservation.courtId);
+      const courtName = court ? court.name : `Court ${reservation.courtId}`;
+
+      return `
       <div class="reservation-card">
         <div class="reservation-info">
           <div class="reservation-court">${courtName}</div>
@@ -132,8 +146,9 @@ export function renderUserReservations(reservations, container, courts = []) {
         </div>
       </div>
     `;
-  }).join('');
-  
+    })
+    .join('');
+
   // Add event listener only once
   if (!listenerAdded.has(container)) {
     setupReservationListeners(container);
@@ -145,10 +160,10 @@ function setupReservationListeners(container) {
   container.addEventListener('click', async (e) => {
     const button = e.target.closest('[data-action]');
     if (!button) return;
-    
+
     const action = button.dataset.action;
     const id = button.dataset.id;
-    
+
     if (action === 'cancel') {
       if (window.cancelReservation) {
         await window.cancelReservation(id);
@@ -167,7 +182,7 @@ export function showError(message, container = null) {
       <strong>Error:</strong> ${message}
     </div>
   `;
-  
+
   if (container) {
     container.innerHTML = errorHtml;
   } else {
@@ -175,7 +190,7 @@ export function showError(message, container = null) {
     const main = document.querySelector('main');
     const existingError = main.querySelector('.error');
     if (existingError) existingError.remove();
-    
+
     main.insertAdjacentHTML('afterbegin', errorHtml);
     setTimeout(() => {
       const error = main.querySelector('.error');
@@ -190,7 +205,7 @@ export function showSuccess(message, container = null) {
       <strong>Success:</strong> ${message}
     </div>
   `;
-  
+
   if (container) {
     container.innerHTML = successHtml;
   } else {
@@ -198,7 +213,7 @@ export function showSuccess(message, container = null) {
     const main = document.querySelector('main');
     const existingSuccess = main.querySelector('.success');
     if (existingSuccess) existingSuccess.remove();
-    
+
     main.insertAdjacentHTML('afterbegin', successHtml);
     setTimeout(() => {
       const success = main.querySelector('.success');
@@ -213,13 +228,25 @@ export function formatTime(time) {
 }
 
 export function formatDate(dateString) {
-  // Fix timezone issue: append time to ensure it's treated as local date
-  const date = new Date(dateString + 'T00:00:00');
+  if (!dateString) return '';
+  let date;
+  try {
+    if (typeof dateString === 'string' && /T\d{2}:?\d*/.test(dateString)) {
+      date = new Date(dateString);
+    } else if (typeof dateString === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      date = new Date(dateString + 'T00:00:00');
+    } else {
+      date = new Date(dateString);
+    }
+  } catch (e) {
+    return String(dateString);
+  }
+  if (Number.isNaN(date.getTime())) return String(dateString);
   return date.toLocaleDateString('en-US', {
     weekday: 'short',
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
   });
 }
 
@@ -231,17 +258,17 @@ export function formatDateTime(dateTimeString) {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 }
 
 // Global functions for inline event handlers
-window.editReservation = async function(_id) {
+window.editReservation = async function (_id) {
   // TODO: Implement edit functionality
   alert('Edit functionality coming soon!');
 };
 
-window.cancelReservation = async function(id) {
+window.cancelReservation = async function (id) {
   if (confirm('Are you sure you want to cancel this reservation?')) {
     try {
       const { deleteReservation } = await import('./api/reservationsApi.js');

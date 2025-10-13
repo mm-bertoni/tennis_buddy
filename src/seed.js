@@ -1,9 +1,13 @@
 // Database seeding script for sample data
 
 import 'dotenv/config';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { connect } from './db/client.js';
 import { create } from './repositories/courtsRepo.js';
 import { create as createUser } from './repositories/usersRepo.js';
+import { create as createBuddy } from './repositories/buddiesRepo.js';
+import { create as createReservation, hasOverlap } from './repositories/reservationsRepo.js';
 
 // Sample data arrays
 const courtNames = [
@@ -109,16 +113,77 @@ async function seedDatabase() {
       await createUser(user);
     }
 
+    // Load created users and courts to create related data
+    const users = await db.collection('users').find({}).toArray();
+    const courts = await db.collection('courts').find({}).toArray();
+
+    // Seed buddy posts
+    console.log('🤝 Seeding buddy posts...');
+    const targetBuddyPosts = 100;
+    let createdBuddy = 0;
+    let buddyAttempts = 0;
+    while (createdBuddy < targetBuddyPosts && buddyAttempts < targetBuddyPosts * 5) {
+      buddyAttempts++;
+      const user = users[Math.floor(Math.random() * users.length)];
+      const skill = user.skill || skills[Math.floor(Math.random() * skills.length)];
+      const hour = 7 + Math.floor(Math.random() * 12); // 7..18
+      const availability = `Weekdays ${hour}:00 - ${hour + 1}:30`;
+      const notes = [
+        `Looking for hitting partner near ${user.name}`,
+        'Open to singles or doubles',
+        'Prefer morning sessions',
+      ][Math.floor(Math.random() * 3)];
+      await createBuddy({ userId: user._id, skill, availability, notes });
+      createdBuddy++;
+    }
+
+    // Seed reservations
+    console.log('📆 Seeding reservations...');
+    const targetReservations = 100;
+    let createdRes = 0;
+    let resAttempts = 0;
+    const today = new Date();
+    const dateWindow = 21; // days ahead
+    while (createdRes < targetReservations && resAttempts < targetReservations * 10) {
+      resAttempts++;
+      const user = users[Math.floor(Math.random() * users.length)];
+      const court = courts[Math.floor(Math.random() * courts.length)];
+      const dayOffset = Math.floor(Math.random() * dateWindow);
+      const date = new Date(today.getTime() + dayOffset * 24 * 60 * 60 * 1000);
+      const dateStr = date.toISOString().slice(0, 10);
+
+      // choose a random start hour between 7 and 20, duration 1 or 2 hours
+      const startHour = 7 + Math.floor(Math.random() * 14); // 7..20
+      const duration = 1 + Math.floor(Math.random() * 2); // 1 or 2
+      const start = `${String(startHour).padStart(2, '0')}:00`;
+      const end = `${String(startHour + duration).padStart(2, '0')}:00`;
+
+      const overlap = await hasOverlap({ courtId: court._id, date: dateStr, start, end });
+      if (!overlap) {
+        await createReservation({
+          courtId: court._id,
+          userId: user._id,
+          date: dateStr,
+          start,
+          end,
+        });
+        createdRes++;
+      }
+    }
+
     console.log('✅ Database seeding completed successfully!');
-    console.log(`📊 Seeded ${sampleCourts.length} courts and ${sampleUsers.length} users`);
+    console.log(
+      `📊 Seeded ${sampleCourts.length} courts, ${sampleUsers.length} users, ${createdBuddy || 0} buddy posts, and ${createdRes || 0} reservations`
+    );
   } catch (error) {
     console.error('❌ Database seeding failed:', error);
     process.exit(1);
   }
 }
 
-// Run seeding if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Run seeding if this file is executed directly (cross-platform)
+const __filename = fileURLToPath(import.meta.url);
+if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)) {
   seedDatabase();
 }
 
