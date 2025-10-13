@@ -22,14 +22,8 @@ const __dirname = path.dirname(__filename);
 // Security middleware
 app.use(
   helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        scriptSrc: ["'self'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
-      },
-    },
+    contentSecurityPolicy: false, // Disable CSP for Vercel deployment
+    crossOriginEmbedderPolicy: false,
   })
 );
 
