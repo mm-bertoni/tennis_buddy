@@ -4,16 +4,28 @@ import { getCourts } from '../api/courtsApi.js';
 import { getReservations } from '../api/reservationsApi.js';
 import { createBuddyPost } from '../api/buddiesApi.js';
 import { renderCourtsSelect, renderReservationCards, showError, showSuccess } from '../views/renderCards.js';
+import { isLoggedIn } from '../utils/auth.js';
 
 let courts = [];
 
 export async function initHome() {
   try {
+    updateUIBasedOnAuth();
     await loadCourts();
     setupEventListeners();
   } catch (error) {
     console.error('Failed to initialize home page:', error);
     showError('Failed to load page data. Please refresh and try again.');
+  }
+}
+
+function updateUIBasedOnAuth() {
+  const buddyBoardSection = document.getElementById('buddy-board');
+  
+  if (!isLoggedIn() && buddyBoardSection) {
+    buddyBoardSection.style.display = 'none';
+  } else if (buddyBoardSection) {
+    buddyBoardSection.style.display = '';
   }
 }
 

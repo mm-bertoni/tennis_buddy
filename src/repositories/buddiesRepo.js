@@ -8,8 +8,29 @@ function col() {
 async function findAll(filters = {}) {
   const query = { isOpen: true };
   if (filters.skill) query.skill = new RegExp(filters.skill, 'i');
-  
-  return col().find(query).sort({ createdAt: -1 }).toArray();
+
+  // Use aggregation to include user name
+  return col()
+    .aggregate([
+      { $match: query },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+      {
+        $addFields: {
+          userName: '$user.name',
+        },
+      },
+      { $project: { user: 0 } },
+      { $sort: { createdAt: -1 } },
+    ])
+    .toArray();
 }
 
 async function findById(id) {
@@ -17,7 +38,10 @@ async function findById(id) {
 }
 
 async function findByUser(userId) {
-  return col().find({ userId: new ObjectId(userId) }).sort({ createdAt: -1 }).toArray();
+  return col()
+    .find({ userId: new ObjectId(userId) })
+    .sort({ createdAt: -1 })
+    .toArray();
 }
 
 async function create({ userId, skill, availability, notes }) {
@@ -27,7 +51,7 @@ async function create({ userId, skill, availability, notes }) {
     availability,
     notes: notes || '',
     isOpen: true,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   });
 }
 

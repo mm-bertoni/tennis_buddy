@@ -31,7 +31,10 @@ export async function deleteReservation(id) {
 }
 
 export async function getUserReservations() {
-  // For demo purposes, we'll get the demo user's reservations
-  const demoUser = await get('/api/v1/users/me');
-  return getReservations({ userId: demoUser._id });
+  // Get current user's ID from localStorage
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    return [];
+  }
+  return getReservations({ userId });
 }

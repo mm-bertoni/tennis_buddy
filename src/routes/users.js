@@ -1,14 +1,19 @@
 import express from 'express';
 import * as usersRepo from '../repositories/usersRepo.js';
-import { validateRequired, validateEmail, validateStringLength } from '../middleware/validate.js';
+import { requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// GET /api/v1/users/me (mock endpoint for demo)
-router.get('/me', async (req, res, next) => {
+// GET /api/v1/users/me - Get current authenticated user
+router.get('/me', requireAuth, async (req, res, next) => {
   try {
-    const user = await usersRepo.getDemoUser();
-    res.json(user);
+    const user = await usersRepo.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    // Don't send password hash
+    const { passwordHash, ...userWithoutPassword } = user;
+    res.json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -36,30 +41,6 @@ router.get('/:id', async (req, res, next) => {
     next(error);
   }
 });
-
-// POST /api/v1/users
-router.post('/',
-  validateRequired(['email', 'name', 'skill']),
-  validateEmail('email'),
-  validateStringLength('name', 100),
-  validateStringLength('skill', 20),
-  async (req, res, next) => {
-    try {
-      const { email, name, skill } = req.body;
-      
-      // Check if user already exists
-      const existingUser = await usersRepo.findByEmail(email);
-      if (existingUser) {
-        return res.status(409).json({ error: 'User with this email already exists' });
-      }
-      
-      const result = await usersRepo.create({ email, name, skill });
-      res.status(201).json({ _id: result.insertedId });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
 // PATCH /api/v1/users/:id
 router.patch('/:id', async (req, res, next) => {

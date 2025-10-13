@@ -15,6 +15,15 @@
         <a href="/" class="nav-link">Home</a>
         <a href="/reservations.html" class="nav-link">Reservations</a>
         <a href="/buddies.html" class="nav-link active">Buddy Board</a>
+        <div class="profile-container">
+          <button class="profile-btn" id="profile-btn">
+            <span class="profile-icon">👤</span>
+            <span>Profile</span>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <!-- Content will be injected by JavaScript -->
+          </div>
+        </div>
       </nav>
     </div>
   </header>
@@ -26,7 +35,7 @@
     </section>
 
     <div class="content-grid">
-      <section class="card">
+      <section class="card" id="post-form-section" style="display: none;">
         <h3>📝 Post Your Availability</h3>
         <form id="post-form" class="buddy-form">
           <div class="form-group">
@@ -71,9 +80,18 @@
       </section>
     </div>
 
+    <!-- My Posts Section (only visible when logged in) -->
+    <section class="card" id="my-posts-section" style="display: none;">
+      <h3>📌 My Posts</h3>
+      <div id="my-posts" class="posts">
+        <p class="loading">Loading your posts...</p>
+      </div>
+    </section>
+
+    <!-- All Posts Section (filtered results) -->
     <section class="card">
       <h3>👥 Available Hitting Partners</h3>
-      <div id="posts" class="posts">
+      <div id="all-posts" class="posts">
         <p class="loading">Loading buddy posts...</p>
       </div>
     </section>
@@ -81,7 +99,7 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2025 Tennis Buddy. Built for CS5610 Web Development.</p>
+      <p>&copy; 2025 Tennis Buddy. Created by Shaobo Chen and Muchen Qi.</p>
     </div>
   </footer>
 

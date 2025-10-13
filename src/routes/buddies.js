@@ -1,15 +1,22 @@
 import express from 'express';
 import * as buddiesRepo from '../repositories/buddiesRepo.js';
-import * as usersRepo from '../repositories/usersRepo.js';
 import { validateRequired, validateStringLength } from '../middleware/validate.js';
+import { requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // GET /api/v1/buddies
 router.get('/', async (req, res, next) => {
   try {
-    const { skill } = req.query;
-    const posts = await buddiesRepo.findAll({ skill });
+    const { skill, userId } = req.query;
+    
+    let posts;
+    if (userId) {
+      posts = await buddiesRepo.findByUser(userId);
+    } else {
+      posts = await buddiesRepo.findAll({ skill });
+    }
+    
     res.json(posts);
   } catch (error) {
     next(error);
@@ -30,7 +37,9 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // POST /api/v1/buddies
-router.post('/',
+router.post(
+  '/',
+  requireAuth,
   validateRequired(['skill', 'availability']),
   validateStringLength('skill', 50),
   validateStringLength('availability', 100),
@@ -38,17 +47,17 @@ router.post('/',
   async (req, res, next) => {
     try {
       const { skill, availability, notes } = req.body;
-      
-      // Get demo user for class demonstration
-      const user = await usersRepo.getDemoUser();
-      
+
+      // Use authenticated user id from token
+      const userId = req.userId;
+
       const result = await buddiesRepo.create({
-        userId: user._id,
+        userId,
         skill,
         availability,
-        notes
+        notes,
       });
-      
+
       res.status(201).json({ _id: result.insertedId });
     } catch (error) {
       next(error);
@@ -57,8 +66,17 @@ router.post('/',
 );
 
 // PATCH /api/v1/buddies/:id
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', requireAuth, async (req, res, next) => {
   try {
+    // Only owner can update
+    const existing = await buddiesRepo.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ error: 'Buddy post not found' });
+    }
+    if (existing.userId.toString() !== req.userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const result = await buddiesRepo.update(req.params.id, req.body);
     if (result.matchedCount === 0) {
       return res.status(404).json({ error: 'Buddy post not found' });
@@ -70,8 +88,16 @@ router.patch('/:id', async (req, res, next) => {
 });
 
 // PATCH /api/v1/buddies/:id/close
-router.patch('/:id/close', async (req, res, next) => {
+router.patch('/:id/close', requireAuth, async (req, res, next) => {
   try {
+    const existing = await buddiesRepo.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ error: 'Buddy post not found' });
+    }
+    if (existing.userId.toString() !== req.userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const result = await buddiesRepo.close(req.params.id);
     if (result.matchedCount === 0) {
       return res.status(404).json({ error: 'Buddy post not found' });
@@ -83,8 +109,16 @@ router.patch('/:id/close', async (req, res, next) => {
 });
 
 // DELETE /api/v1/buddies/:id
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', requireAuth, async (req, res, next) => {
   try {
+    const existing = await buddiesRepo.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ error: 'Buddy post not found' });
+    }
+    if (existing.userId.toString() !== req.userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const result = await buddiesRepo.remove(req.params.id);
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: 'Buddy post not found' });

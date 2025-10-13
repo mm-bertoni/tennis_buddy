@@ -24,12 +24,14 @@ The application solves real pain points faced by tennis players on campus, makin
 ## Target Users
 
 ### Persona 1: Sarah - The Busy Graduate Student
+
 - **Background**: 24-year-old PhD student in Computer Science
 - **Tennis Experience**: Intermediate player (3.0-3.5 NTRP rating)
 - **Pain Points**: Limited free time, difficulty finding courts during peak hours, wants to find consistent hitting partners
 - **Goals**: Efficiently book courts during her limited free time and connect with players of similar skill level
 
 ### Persona 2: Mike - The Social Tennis Enthusiast
+
 - **Background**: 20-year-old undergraduate in Business
 - **Tennis Experience**: Advanced player (4.0+ NTRP rating)
 - **Pain Points**: Wants to find competitive matches, looking to improve his game
@@ -51,6 +53,7 @@ The application solves real pain points faced by tennis players on campus, makin
 The application uses MongoDB with the following collections:
 
 ### Users Collection
+
 ```javascript
 {
   "_id": "ObjectId",
@@ -62,6 +65,7 @@ The application uses MongoDB with the following collections:
 ```
 
 ### Courts Collection
+
 ```javascript
 {
   "_id": "ObjectId",
@@ -77,6 +81,7 @@ The application uses MongoDB with the following collections:
 ```
 
 ### Reservations Collection
+
 ```javascript
 {
   "_id": "ObjectId",
@@ -91,6 +96,7 @@ The application uses MongoDB with the following collections:
 ```
 
 ### Buddy Posts Collection
+
 ```javascript
 {
   "_id": "ObjectId",
@@ -106,18 +112,18 @@ The application uses MongoDB with the following collections:
 ## Design Mockups
 
 ![Home Page Design](public/img/mockup-home.png)
-*Home page showing court search and buddy board*
+_Home page showing court search and buddy board_
 
 ![Reservations Page Design](public/img/mockup-reservations.png)
-*Reservations page for booking and managing court reservations*
+_Reservations page for booking and managing court reservations_
 
 ![Buddies Page Design](public/img/mockup-buddies.png)
-*Buddies page for posting and finding hitting partners*
+_Buddies page for posting and finding hitting partners_
 
 ## Data Model Diagram
 
 ![Data Model Diagram](public/img/data-model.png)
-*Entity relationship diagram showing collections and their relationships*
+_Entity relationship diagram showing collections and their relationships_
 
 ## Technology Stack
 
@@ -130,39 +136,52 @@ The application uses MongoDB with the following collections:
 ## Installation & Setup
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - MongoDB (local or Atlas)
 
 ### Local Development
 
 1. **Clone the repository**
+
    ```bash
    git clone [repository-url]
    cd tennis-buddy
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
+
    Edit `.env` with your MongoDB connection string:
+
    ```
    MONGO_URI=mongodb://localhost:27017
    DB_NAME=tennis_buddy
    PORT=3000
    ```
 
-4. **Start the development server**
+4. **Seed the database**
+
+   ```bash
+   node src/seed.js
+   ```
+
+5. **Start the development server**
+
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**
+6. **Open your browser**
    Navigate to `http://localhost:3000`
 
 ### Production Deployment
@@ -193,6 +212,7 @@ The application uses MongoDB with the following collections:
 ## API Endpoints
 
 ### Courts
+
 - `GET /api/v1/courts` - List all courts (with optional filters)
 - `GET /api/v1/courts/:id` - Get specific court
 - `POST /api/v1/courts` - Create new court (admin)
@@ -200,6 +220,7 @@ The application uses MongoDB with the following collections:
 - `DELETE /api/v1/courts/:id` - Delete court
 
 ### Reservations
+
 - `GET /api/v1/reservations` - List reservations (with filters)
 - `GET /api/v1/reservations/:id` - Get specific reservation
 - `POST /api/v1/reservations` - Create new reservation
@@ -207,6 +228,7 @@ The application uses MongoDB with the following collections:
 - `DELETE /api/v1/reservations/:id` - Cancel reservation
 
 ### Buddy Posts
+
 - `GET /api/v1/buddies` - List buddy posts (with skill filter)
 - `GET /api/v1/buddies/:id` - Get specific buddy post
 - `POST /api/v1/buddies` - Create new buddy post
@@ -215,12 +237,19 @@ The application uses MongoDB with the following collections:
 - `DELETE /api/v1/buddies/:id` - Delete buddy post
 
 ### Users
+
 - `GET /api/v1/users/me` - Get current user (demo)
 - `POST /api/v1/users` - Create new user
+
+### Authentication
+
+- `POST /api/v1/auth/signup` - Create a new account and receive a JWT
+- `POST /api/v1/auth/login` - Log in with user email and password
 
 ## Features
 
 ### ✅ Core Features
+
 - [x] Court search and availability checking
 - [x] Court reservation system with conflict prevention
 - [x] Buddy posting and finding system
@@ -230,6 +259,7 @@ The application uses MongoDB with the following collections:
 - [x] Error handling and user feedback
 
 ### 🔒 Security Features
+
 - [x] Input validation and sanitization
 - [x] Rate limiting to prevent abuse
 - [x] CORS configuration
@@ -237,6 +267,7 @@ The application uses MongoDB with the following collections:
 - [x] Environment variable protection
 
 ### 📱 User Experience
+
 - [x] Clean, modern interface
 - [x] Intuitive navigation
 - [x] Loading states and feedback
@@ -310,10 +341,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Demo Screenshots
 
 ![Home Page](public/img/demo-home.png)
-*Home page showing court search functionality*
+_Home page showing court search functionality_
 
 ![Reservations](public/img/demo-reservations.png)
-*Reservations page with booking form*
+_Reservations page with booking form_
 
 ![Buddy Board](public/img/demo-buddies.png)
-*Buddy board with available hitting partners*
+_Buddy board with available hitting partners_

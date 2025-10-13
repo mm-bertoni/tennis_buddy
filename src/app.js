@@ -9,20 +9,23 @@ import courtsRouter from './routes/courts.js';
 import reservationsRouter from './routes/reservations.js';
 import buddiesRouter from './routes/buddies.js';
 import usersRouter from './routes/users.js';
+import authRouter from './routes/auth.js';
 
 const app = express();
 
 // Security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
     },
-  },
-}));
+  })
+);
 
 app.use(cors());
 
@@ -41,6 +44,7 @@ app.use('/api/v1/courts', courtsRouter);
 app.use('/api/v1/reservations', reservationsRouter);
 app.use('/api/v1/buddies', buddiesRouter);
 app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/auth', authRouter);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
