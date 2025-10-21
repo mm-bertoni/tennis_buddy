@@ -12,7 +12,7 @@ A web application that helps students find and book tennis courts on campus whil
 - **Repository**: [github.com/GideonCCC/tennis_buddy](https://github.com/GideonCCC/tennis_buddy)
 - **Database**: MongoDB Atlas (Cloud)
 - **Status**: ✅ Development Environment Ready
-- **Live Demo**: [To be deployed]
+- **Live Demo**: [To be deployed] (Note->Missing a link to the deployed site) 
 
 ## Current Setup Status
 
