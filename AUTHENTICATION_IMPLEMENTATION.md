@@ -182,3 +182,5 @@ This document describes the authentication-based visibility system implemented f
 ✅ User names displayed on all posts
 ✅ Full CRUD operations for own content only
 
+// I Liked how you broke out the Authentication in detail and described what was available publicly vs. for authenticated users. 
+
