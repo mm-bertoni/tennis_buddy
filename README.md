@@ -454,3 +454,5 @@ _Reservations page with booking form_
 
 ![Buddy Board](public/img/demo-buddies.png)
 _Buddy board with available hitting partners_
+
+// Was there any AI usage? Even if not, should include the AI usage statement (and indicate no usage) to fit with the project spec. 
